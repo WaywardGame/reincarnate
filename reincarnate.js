@@ -29,6 +29,7 @@ var Mod = (function (_super) {
             player.status.bleeding = false;
             player.status.burned = false;
             player.status.poisoned = false;
+            player.weight = 0;
             game.raft = null;
             audio.queueEffect(SfxType.Death);
             ui.displayMessage(this.reincarnateMessage, MessageType.Stat);
