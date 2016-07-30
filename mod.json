@@ -1,10 +1,10 @@
 {
 	"name": "Reincarnate",
 	"description": "Don't grieve. Anything you lose comes round in another form. ― Rumi",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"author": "Vaughn Royko",
 	"compatible_minor_versions": [
-		0
+		1
 	],
 	"unloadable": true,
 	"files": [
