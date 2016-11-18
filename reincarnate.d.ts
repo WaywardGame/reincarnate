@@ -1,5 +1,5 @@
 /// <reference path="mod-reference/modreference.d.ts" />
-declare class Mod extends Mods.Mod {
+export default class Mod extends Mods.Mod {
     private reincarnateMessage;
     onInitialize(saveDataGlobal: any): any;
     onLoad(saveData: any): void;

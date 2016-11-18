@@ -1,15 +1,13 @@
 {
 	"name": "Reincarnate",
 	"description": "Don't grieve. Anything you lose comes round in another form. ― Rumi",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"author": "Vaughn Royko",
 	"compatible_minor_versions": [
-		1
+		2
 	],
 	"unloadable": true,
-	"files": [
-		"reincarnate.js"
-	],
+	"file": "reincarnate.js",
 	"hooks": [
 		"OnPlayerDamage"
 	],

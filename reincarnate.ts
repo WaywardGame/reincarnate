@@ -1,6 +1,6 @@
 ﻿/// <reference path="mod-reference/modreference.d.ts"/>
 
-class Mod extends Mods.Mod {
+export default class Mod extends Mods.Mod {
 	private reincarnateMessage: number;
 
 	public onInitialize(saveDataGlobal: any): any {
@@ -23,9 +23,10 @@ class Mod extends Mods.Mod {
 		if (player.health + amount <= 0) {
 
 			// Drop items
-			for (let i = player.inventory.containedItems.length - 1; i >= 0; i--) {
+			const playerInventory = player.inventory.containedItems;
+			for (let i = playerInventory.length - 1; i >= 0; i--) {
 				// Drop them in a 3x3 square randomly
-				Item.placeOnTile(player.inventory.containedItems[i], player.x + Utilities.Random.randomFromInterval(-1, 1), player.y + Utilities.Random.randomFromInterval(-1, 1), player.z, true);
+				playerInventory[i].placeOnTile(player.x + Utilities.Random.randomFromInterval(-1, 1), player.y + Utilities.Random.randomFromInterval(-1, 1), player.z, true);
 			}
 
 			// Reset stats
@@ -52,17 +53,24 @@ class Mod extends Mods.Mod {
 			while (true) {
 				xTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
 				yTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
-				if (terrains[Utilities.TileHelpers.getType(game.getTile(xTry, yTry, Z_NORMAL))].passable) {
+				if (Terrain.defines[Utilities.TileHelpers.getType(game.getTile(xTry, yTry, Z_NORMAL))].passable) {
 					player.x = xTry;
 					player.y = yTry;
+					player.nextX = xTry;
+					player.nextY = yTry;
 					break;
 				}
 			}
-			player.z = Z_NORMAL; // Always make the player go to overworld
 
+			// Always make the player go to overworld
+			player.z = Z_NORMAL;
+
+			game.updateCraftTableAndWeight();
 			game.updateGame();
+
 			return false;
 		}
+
 		return true;
 	}
 }
