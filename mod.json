@@ -3,13 +3,13 @@
 	"description": "Don't grieve. Anything you lose comes round in another form. ― Rumi",
 	"version": "1.2.0",
 	"author": "Vaughn Royko",
-	"compatible_minor_versions": [
-		2
+	"compatibleMinorVersions": [
+		3
 	],
 	"unloadable": true,
-	"file": "reincarnate.js",
+	"file": "Reincarnate.js",
 	"hooks": [
-		"OnPlayerDamage"
+		"OnPlayerDeath"
 	],
 	"publishedFileId": "677681194"
 }

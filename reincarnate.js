@@ -1,6 +1,6 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "Enums", "language/Messages", "mod/Mod", "tile/Terrains", "Utilities"], function (require, exports, Enums_1, Messages_1, Mod_1, Terrains_1, Utilities) {
     "use strict";
-    class Mod extends Mods.Mod {
+    class Reincarnate extends Mod_1.default {
         onInitialize(saveDataGlobal) {
         }
         onLoad(saveData) {
@@ -10,46 +10,50 @@ define(["require", "exports"], function (require, exports) {
         }
         onSave() {
         }
-        onPlayerDamage(amount, damageMessage) {
-            if (player.health + amount <= 0) {
-                const playerInventory = player.inventory.containedItems;
-                for (let i = playerInventory.length - 1; i >= 0; i--) {
-                    playerInventory[i].placeOnTile(player.x + Utilities.Random.randomFromInterval(-1, 1), player.y + Utilities.Random.randomFromInterval(-1, 1), player.z, true);
+        onPlayerDeath(player) {
+            itemManager.placeItemsAroundLocation(player.inventory, player.x, player.y, player.z);
+            player.stats.health.value = player.strength;
+            player.stats.stamina.value = player.dexterity;
+            player.stats.hunger.value = player.starvation;
+            player.stats.thirst.value = player.dehydration;
+            player.status.bleeding = false;
+            player.status.burned = false;
+            player.status.poisoned = false;
+            player.raft = undefined;
+            player.equipped = {};
+            player.customization = {
+                hairStyle: Utilities.Enums.getRandomIndex(Enums_1.Hairstyle),
+                hairColor: Utilities.Enums.getRandomIndex(Enums_1.HairColor),
+                skinColor: Utilities.Enums.getRandomIndex(Enums_1.SkinColor)
+            };
+            let xTry;
+            let yTry;
+            while (true) {
+                xTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
+                yTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
+                if (Terrains_1.default[Utilities.TileHelpers.getType(game.getTile(xTry, yTry, Enums_1.WorldZ.Overworld))].passable) {
+                    player.x = xTry;
+                    player.y = yTry;
+                    player.nextX = xTry;
+                    player.nextY = yTry;
+                    break;
                 }
-                player.health = player.strength;
-                player.stamina = player.dexterity;
-                player.hunger = player.starvation;
-                player.thirst = player.dehydration;
-                player.status.bleeding = false;
-                player.status.burned = false;
-                player.status.poisoned = false;
-                player.weight = 0;
-                game.raft = null;
-                audio.queueEffect(SfxType.Death);
-                ui.displayMessage(this.reincarnateMessage, MessageType.Stat);
-                player.gender = Math.floor(Math.random() * 2);
-                let xTry;
-                let yTry;
-                while (true) {
-                    xTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
-                    yTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
-                    if (Terrain.defines[Utilities.TileHelpers.getType(game.getTile(xTry, yTry, Z_NORMAL))].passable) {
-                        player.x = xTry;
-                        player.y = yTry;
-                        player.nextX = xTry;
-                        player.nextY = yTry;
-                        break;
-                    }
-                }
-                player.z = Z_NORMAL;
-                game.updateCraftTableAndWeight();
-                game.updateGame();
-                return false;
             }
-            return true;
+            player.z = Enums_1.WorldZ.Overworld;
+            audio.queueEffect(Enums_1.SfxType.Death, player.x, player.y, player.z);
+            ui.displayMessage(player, this.reincarnateMessage, Messages_1.MessageType.Stat);
+            game.updateFieldOfViewNextTick();
+            player.updateCraftTableAndWeight();
+            player.calculateEquipmentStats();
+            player.calculateStats();
+            player.tick();
+            player.addDelay(Enums_1.Delay.LongPause);
+            game.updateFieldOfViewNextTick();
+            game.updateGame();
+            return false;
         }
     }
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Mod;
+    exports.default = Reincarnate;
 });
-//# sourceMappingURL=reincarnate.js.map
+//# sourceMappingURL=Reincarnate.js.map
