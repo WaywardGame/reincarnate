@@ -27,6 +27,10 @@ export default class Reincarnate extends Mod {
 		itemManager.placeItemsAroundLocation(player.inventory, player.x, player.y, player.z);
 
 		// Reset stats
+		player.stats.health.timer = 0;
+		player.stats.stamina.timer = 0;
+		player.stats.hunger.timer = 0;
+		player.stats.thirst.timer = 0;
 		player.stats.health.value = player.strength;
 		player.stats.stamina.value = player.dexterity;
 		player.stats.hunger.value = player.starvation;
@@ -36,6 +40,10 @@ export default class Reincarnate extends Mod {
 		player.status.poisoned = false;
 		player.raft = undefined;
 		player.equipped = {};
+		player.movementCompleteZ = undefined;
+		player.movementProgress = 1;
+		player.restData = undefined;
+		player.swimming = false;
 
 		// Random character
 		player.customization = {
@@ -50,11 +58,11 @@ export default class Reincarnate extends Mod {
 		while (true) {
 			xTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
 			yTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
-			if (Terrains[Utilities.TileHelpers.getType(game.getTile(xTry, yTry, WorldZ.Overworld))].passable) {
+			if (Utilities.TileHelpers.isOpenTile({ x: xTry, y: yTry, z: WorldZ.Overworld }, game.getTile(xTry, yTry, WorldZ.Overworld))) {
 				player.x = xTry;
 				player.y = yTry;
-				player.nextX = xTry;
-				player.nextY = yTry;
+				player.fromX = xTry;
+				player.fromY = yTry;
 				break;
 			}
 		}
@@ -63,21 +71,20 @@ export default class Reincarnate extends Mod {
 		player.z = WorldZ.Overworld;
 
 		// Effects and messages
-		audio.queueEffect(SfxType.Death, player.x, player.y, player.z);
 		ui.displayMessage(player, this.reincarnateMessage, MessageType.Stat);
 
-		game.updateFieldOfViewNextTick();
-
 		player.updateCraftTableAndWeight();
-		player.calculateEquipmentStats();
-		player.calculateStats();
+		player.updateStatsAndAttributes();
+
+		player.createFlowFieldManager();
 
 		player.tick();
 
 		player.addDelay(Delay.LongPause);
 
-		game.updateFieldOfViewNextTick();
-		game.updateGame();
+		game.updateView(true);
+
+		player.queueSoundEffect(SfxType.Death, undefined, undefined, true);
 
 		return false;
 	}

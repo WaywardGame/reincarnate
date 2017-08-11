@@ -1,5 +1,6 @@
-define(["require", "exports", "Enums", "language/Messages", "mod/Mod", "tile/Terrains", "Utilities"], function (require, exports, Enums_1, Messages_1, Mod_1, Terrains_1, Utilities) {
+define(["require", "exports", "Enums", "language/Messages", "mod/Mod", "Utilities"], function (require, exports, Enums_1, Messages_1, Mod_1, Utilities) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     class Reincarnate extends Mod_1.default {
         onInitialize(saveDataGlobal) {
         }
@@ -12,6 +13,10 @@ define(["require", "exports", "Enums", "language/Messages", "mod/Mod", "tile/Ter
         }
         onPlayerDeath(player) {
             itemManager.placeItemsAroundLocation(player.inventory, player.x, player.y, player.z);
+            player.stats.health.timer = 0;
+            player.stats.stamina.timer = 0;
+            player.stats.hunger.timer = 0;
+            player.stats.thirst.timer = 0;
             player.stats.health.value = player.strength;
             player.stats.stamina.value = player.dexterity;
             player.stats.hunger.value = player.starvation;
@@ -21,6 +26,10 @@ define(["require", "exports", "Enums", "language/Messages", "mod/Mod", "tile/Ter
             player.status.poisoned = false;
             player.raft = undefined;
             player.equipped = {};
+            player.movementCompleteZ = undefined;
+            player.movementProgress = 1;
+            player.restData = undefined;
+            player.swimming = false;
             player.customization = {
                 hairStyle: Utilities.Enums.getRandomIndex(Enums_1.Hairstyle),
                 hairColor: Utilities.Enums.getRandomIndex(Enums_1.HairColor),
@@ -31,29 +40,26 @@ define(["require", "exports", "Enums", "language/Messages", "mod/Mod", "tile/Ter
             while (true) {
                 xTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
                 yTry = Math.floor(Utilities.Random.nextFloat() * 400 + 50);
-                if (Terrains_1.default[Utilities.TileHelpers.getType(game.getTile(xTry, yTry, Enums_1.WorldZ.Overworld))].passable) {
+                if (Utilities.TileHelpers.isOpenTile({ x: xTry, y: yTry, z: Enums_1.WorldZ.Overworld }, game.getTile(xTry, yTry, Enums_1.WorldZ.Overworld))) {
                     player.x = xTry;
                     player.y = yTry;
-                    player.nextX = xTry;
-                    player.nextY = yTry;
+                    player.fromX = xTry;
+                    player.fromY = yTry;
                     break;
                 }
             }
             player.z = Enums_1.WorldZ.Overworld;
-            audio.queueEffect(Enums_1.SfxType.Death, player.x, player.y, player.z);
             ui.displayMessage(player, this.reincarnateMessage, Messages_1.MessageType.Stat);
-            game.updateFieldOfViewNextTick();
             player.updateCraftTableAndWeight();
-            player.calculateEquipmentStats();
-            player.calculateStats();
+            player.updateStatsAndAttributes();
+            player.createFlowFieldManager();
             player.tick();
             player.addDelay(Enums_1.Delay.LongPause);
-            game.updateFieldOfViewNextTick();
-            game.updateGame();
+            game.updateView(true);
+            player.queueSoundEffect(Enums_1.SfxType.Death, undefined, undefined, true);
             return false;
         }
     }
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Reincarnate;
 });
 //# sourceMappingURL=Reincarnate.js.map
