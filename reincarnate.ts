@@ -28,20 +28,26 @@ export default class Reincarnate extends Mod {
 
 		// Reset stats
 		player.stats.health.timer = 0;
-		player.stats.stamina.timer = 0;
-		player.stats.hunger.timer = 0;
-		player.stats.thirst.timer = 0;
 		player.stats.health.value = player.strength;
+
+		player.stats.stamina.timer = 0;
 		player.stats.stamina.value = player.dexterity;
+
+		player.stats.hunger.timer = 0;
 		player.stats.hunger.value = player.starvation;
+
+		player.stats.thirst.timer = 0;
 		player.stats.thirst.value = player.dehydration;
+
 		player.status.bleeding = false;
 		player.status.burned = false;
 		player.status.poisoned = false;
-		player.raft = undefined;
+
 		player.equipped = {};
+		player.isMoving = false;
 		player.movementCompleteZ = undefined;
 		player.movementProgress = 1;
+		player.raft = undefined;
 		player.restData = undefined;
 		player.swimming = false;
 
