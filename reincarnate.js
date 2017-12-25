@@ -64,7 +64,7 @@ define(["require", "exports", "Enums", "language/Messages", "mod/Mod", "tile/Ter
             }
             player.z = Enums_1.WorldZ.Overworld;
             ui.displayMessage(player, this.reincarnateMessage, Messages_1.MessageType.Stat);
-            player.updateCraftTableAndWeight();
+            player.updateTablesAndWeight();
             player.updateStatsAndAttributes();
             player.tick();
             player.addDelay(Enums_1.Delay.LongPause);

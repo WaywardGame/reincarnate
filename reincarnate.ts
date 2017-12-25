@@ -92,7 +92,7 @@ export default class Reincarnate extends Mod {
 		// Effects and messages
 		ui.displayMessage(player, this.reincarnateMessage, MessageType.Stat);
 
-		player.updateCraftTableAndWeight();
+		player.updateTablesAndWeight();
 		player.updateStatsAndAttributes();
 
 		player.tick();
