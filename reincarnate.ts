@@ -24,9 +24,11 @@ export default class Reincarnate extends Mod {
 			let newSkill = Utilities.Math2.roundNumber(Utilities.Random.nextFloat() * 9 - 5 + skill.core, 1);
 			if (newSkill > 100) {
 				newSkill = 100;
+
 			} else if (newSkill < 0) {
 				newSkill = 0;
 			}
+			
 			skill.percent = skill.core = newSkill;
 		}
 
