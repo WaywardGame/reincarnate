@@ -21,4 +21,4 @@ Open the folder in Visual Studio Code and build with Ctrl+Shift+B.
 ## Screenshots
 ![Reincarnate](https://raw.githubusercontent.com/WaywardGame/reincarnate/master/mod.png "Reincarnate")
 
-![Screenshot #1](http://images.akamai.steamusercontent.com/ugc/450734459518376884/322F711E5BBEB489BD80FF2CA6B5773E2E4D4989/ "Screenshot #1")
+![Screenshot #1](https://steamuserimages-a.akamaihd.net/ugc/939433370341329542/AA99C00466E19286080D78D278B7BCE19E8FFCB9/ "Screenshot #1")
