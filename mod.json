@@ -8,5 +8,8 @@
 	],
 	"unloadable": true,
 	"file": "Reincarnate.js",
+	"languages": [
+		"lang/english"
+	],
 	"publishedFileId": "677681194"
 }

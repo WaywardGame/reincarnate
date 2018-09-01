@@ -1,8 +1,9 @@
 import { Stat } from "entity/IStats";
 import { Delay, HairColor, HairStyle, SfxType, SkillType, SkinColor, StatusType, WorldZ } from "Enums";
-import { MessageType } from "language/IMessages";
+import { Message, MessageType } from "language/IMessages";
 import { HookMethod } from "mod/IHookHost";
 import Mod from "mod/Mod";
+import Register from "mod/ModRegistry";
 import { IPlayer } from "player/IPlayer";
 import Terrains from "tile/Terrains";
 import Enums from "utilities/enum/Enums";
@@ -11,11 +12,9 @@ import Random from "utilities/Random";
 import TileHelpers from "utilities/TileHelpers";
 
 export default class Reincarnate extends Mod {
-	private reincarnateMessage: number;
 
-	public onLoad(saveData: any): void {
-		this.reincarnateMessage = this.addMessage("Reincarnate", "You have been reincarnated! Can you track down the location of your previous demise?");
-	}
+	@Register.message("Reincarnate")
+	public readonly reincarnateMessage: Message;
 
 	@HookMethod
 	public onPlayerDeath(player: IPlayer): boolean | undefined {
