@@ -4,12 +4,15 @@
 	"version": "1.3.0",
 	"author": "Vaughn Royko",
 	"compatibleMinorVersions": [
-		6
+		7
 	],
 	"unloadable": true,
 	"file": "Reincarnate.js",
 	"languages": [
 		"lang/english"
+	],
+	"tags": [
+		"Character"
 	],
 	"publishedFileId": "677681194"
 }

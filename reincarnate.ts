@@ -1,10 +1,12 @@
+import { StatusEffectChangeReason } from "entity/IEntity";
 import { Stat } from "entity/IStats";
 import { Delay, HairColor, HairStyle, SfxType, SkillType, SkinColor, StatusType, WorldZ } from "Enums";
-import { Message, MessageType } from "language/IMessages";
+import Message from "language/dictionary/Message";
 import { HookMethod } from "mod/IHookHost";
 import Mod from "mod/Mod";
 import Register from "mod/ModRegistry";
 import { IPlayer } from "player/IPlayer";
+import { MessageType } from "player/MessageManager";
 import Terrains from "tile/Terrains";
 import Enums from "utilities/enum/Enums";
 import Math2 from "utilities/math/Math2";
@@ -24,8 +26,7 @@ export default class Reincarnate extends Mod {
 		// Randomize skills a bit
 		const skills = Enums.values(SkillType);
 		for (const skillType of skills) {
-			const skill = localPlayer.skills[skillType];
-			let newSkill = Math2.roundNumber(Random.float() * 9 - 5 + skill.core, 1);
+			let newSkill = Math2.roundNumber(Random.float() * 9 - 5 + localPlayer.getSkillCore(skillType), 1);
 			if (newSkill > 100) {
 				newSkill = 100;
 
@@ -33,7 +34,7 @@ export default class Reincarnate extends Mod {
 				newSkill = 0;
 			}
 
-			skill.percent = skill.core = newSkill;
+			localPlayer.setSkillCore(skillType, newSkill);
 		}
 
 		// Randomize stats a bit
@@ -58,9 +59,9 @@ export default class Reincarnate extends Mod {
 		player.setStat(hunger, hunger.max);
 		player.setStat(thirst, thirst.max);
 
-		player.setStatus(StatusType.Bleeding, false);
-		player.setStatus(StatusType.Burned, false);
-		player.setStatus(StatusType.Poisoned, false);
+		player.setStatus(StatusType.Bleeding, false, StatusEffectChangeReason.Passed);
+		player.setStatus(StatusType.Burned, false, StatusEffectChangeReason.Passed);
+		player.setStatus(StatusType.Poisoned, false, StatusEffectChangeReason.Passed);
 
 		player.equipped = {};
 		player.isMoving = false;
