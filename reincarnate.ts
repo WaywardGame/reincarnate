@@ -1,6 +1,7 @@
 import { StatusEffectChangeReason } from "entity/IEntity";
 import { Stat } from "entity/IStats";
 import { Delay, HairColor, HairStyle, SfxType, SkillType, SkinColor, StatusType, WorldZ } from "Enums";
+import { RenderSource } from "game/IGame";
 import Message from "language/dictionary/Message";
 import { HookMethod } from "mod/IHookHost";
 import Mod from "mod/Mod";
@@ -117,7 +118,7 @@ export default class Reincarnate extends Mod {
 			player.swimming = true;
 		}
 
-		game.updateView(true);
+		game.updateView(RenderSource.Mod, true);
 
 		player.queueSoundEffect(SfxType.Death, undefined, undefined, true);
 
