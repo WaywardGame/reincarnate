@@ -1,13 +1,15 @@
-import { StatusEffectChangeReason } from "entity/IEntity";
+import { SfxType } from "audio/IAudio";
+import { StatusEffectChangeReason, StatusType } from "entity/IEntity";
+import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "entity/IHuman";
 import { Stat } from "entity/IStats";
-import { Delay, HairColor, HairStyle, SfxType, SkillType, SkinColor, StatusType, WorldZ } from "Enums";
+import { MessageType } from "entity/player/MessageManager";
+import Player from "entity/player/Player";
 import { RenderSource } from "game/IGame";
+import { WorldZ } from "game/WorldZ";
 import Message from "language/dictionary/Message";
 import { HookMethod } from "mod/IHookHost";
 import Mod from "mod/Mod";
 import Register from "mod/ModRegistry";
-import { IPlayer } from "player/IPlayer";
-import { MessageType } from "player/MessageManager";
 import Terrains from "tile/Terrains";
 import Enums from "utilities/enum/Enums";
 import Math2 from "utilities/math/Math2";
@@ -20,7 +22,7 @@ export default class Reincarnate extends Mod {
 	public readonly reincarnateMessage: Message;
 
 	@HookMethod
-	public onPlayerDeath(player: IPlayer): boolean | undefined {
+	public onPlayerDeath(player: Player): boolean | undefined {
 		// Drop items
 		itemManager.placeItemsAroundLocation(player.inventory, player.x, player.y, player.z);
 

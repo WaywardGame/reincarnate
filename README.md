@@ -5,11 +5,13 @@ Reincarnate respawns you somewhere random in your world on death and refills you
 
 This differs a bit from the casual mode built into the game in that your character's appearance changes, your stats and skills are randomized a bit (based on previous values), and you spawn in a randomized location on death. Your reputation will also remain unchanged.
 
-## Cloning:
+## Cloning/Setup:
 ```
 git clone https://github.com/WaywardGame/reincarnate.git
 cd reincarnate
-git submodule update --init
+On Windows: path/to/wayward/install/wayward.cmd +mod update .
+On macOS: path/to/wayward/install/Wayward.app/Contents/MacOS/Electron +mod update .
+On Linux: path/to/wayward/install/wayward +mod update .
 ```
 
 ## Building:
