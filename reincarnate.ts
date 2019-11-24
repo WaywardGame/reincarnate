@@ -41,15 +41,15 @@ export default class Reincarnate extends Mod {
 		}
 
 		// Randomize stats a bit
-		const health = player.getStat(Stat.Health);
-		const stamina = player.getStat(Stat.Stamina);
-		const hunger = player.getStat(Stat.Hunger);
-		const thirst = player.getStat(Stat.Thirst);
+		const health = player.stat.get(Stat.Health);
+		const stamina = player.stat.get(Stat.Stamina);
+		const hunger = player.stat.get(Stat.Hunger);
+		const thirst = player.stat.get(Stat.Thirst);
 
-		player.setStatMax(Stat.Health, health.max + Math.floor(Random.float() * 4 - 2));
-		player.setStatMax(Stat.Stamina, stamina.max + Math.floor(Random.float() * 4 - 2));
-		player.setStatMax(Stat.Hunger, hunger.max + Math.floor(Random.float() * 4 - 2));
-		player.setStatMax(Stat.Thirst, thirst.max + Math.floor(Random.float() * 4 - 2));
+		player.stat.setMax(Stat.Health, health.max + Math.floor(Random.float() * 4 - 2));
+		player.stat.setMax(Stat.Stamina, stamina.max + Math.floor(Random.float() * 4 - 2));
+		player.stat.setMax(Stat.Hunger, hunger.max + Math.floor(Random.float() * 4 - 2));
+		player.stat.setMax(Stat.Thirst, thirst.max + Math.floor(Random.float() * 4 - 2));
 
 		// Reset stats
 		health.changeTimer = health.nextChangeTimer;
@@ -57,10 +57,10 @@ export default class Reincarnate extends Mod {
 		hunger.changeTimer = hunger.nextChangeTimer;
 		thirst.changeTimer = thirst.nextChangeTimer;
 
-		player.setStat(health, health.max);
-		player.setStat(stamina, stamina.max);
-		player.setStat(hunger, hunger.max);
-		player.setStat(thirst, thirst.max);
+		player.stat.set(health, health.max);
+		player.stat.set(stamina, stamina.max);
+		player.stat.set(hunger, hunger.max);
+		player.stat.set(thirst, thirst.max);
 
 		player.setStatus(StatusType.Bleeding, false, StatusEffectChangeReason.Passed);
 		player.setStatus(StatusType.Burned, false, StatusEffectChangeReason.Passed);
