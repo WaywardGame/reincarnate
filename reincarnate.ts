@@ -2,12 +2,13 @@ import { SfxType } from "audio/IAudio";
 import { StatusEffectChangeReason, StatusType } from "entity/IEntity";
 import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "entity/IHuman";
 import { Stat } from "entity/IStats";
-import { MessageType } from "entity/player/MessageManager";
+import { MessageType } from "entity/player/IMessageManager";
 import Player from "entity/player/Player";
+import { EventBus } from "event/EventBuses";
+import { EventHandler } from "event/EventManager";
 import { RenderSource } from "game/IGame";
 import { WorldZ } from "game/WorldZ";
 import Message from "language/dictionary/Message";
-import { HookMethod } from "mod/IHookHost";
 import Mod from "mod/Mod";
 import Register from "mod/ModRegistry";
 import Terrains from "tile/Terrains";
@@ -21,15 +22,15 @@ export default class Reincarnate extends Mod {
 	@Register.message("Reincarnate")
 	public readonly reincarnateMessage: Message;
 
-	@HookMethod
-	public onPlayerDeath(player: Player): boolean | undefined {
+	@EventHandler(EventBus.Players, "shouldDie")
+	public onPlayerDeath(player: Player): false {
 		// Drop items
 		itemManager.placeItemsAroundLocation(player.inventory, player.x, player.y, player.z);
 
 		// Randomize skills a bit
 		const skills = Enums.values(SkillType);
 		for (const skillType of skills) {
-			let newSkill = Math2.roundNumber(Random.float() * 9 - 5 + localPlayer.getSkillCore(skillType), 1);
+			let newSkill = Math2.roundNumber(Random.float() * 9 - 5 + player.getSkillCore(skillType), 1);
 			if (newSkill > 100) {
 				newSkill = 100;
 
@@ -37,7 +38,7 @@ export default class Reincarnate extends Mod {
 				newSkill = 0;
 			}
 
-			localPlayer.setSkillCore(skillType, newSkill);
+			player.setSkillCore(skillType, newSkill);
 		}
 
 		// Randomize stats a bit
@@ -69,10 +70,9 @@ export default class Reincarnate extends Mod {
 		player.equipped = {};
 		player.isMoving = false;
 		player.isMovingClientside = false;
-		player.movementComplete = false;
 		player.movementCompleteZ = undefined;
 		player.movementProgress = 1;
-		player.raft = undefined;
+		player.vehicleItemId = undefined;
 		player.restData = undefined;
 		player.swimming = false;
 		player.stopNextMovement = false;
@@ -81,7 +81,7 @@ export default class Reincarnate extends Mod {
 		player.customization = {
 			hairStyle: HairStyle[Enums.getRandom(HairStyle)] as keyof typeof HairStyle,
 			hairColor: HairColor[Enums.getRandom(HairColor)] as keyof typeof HairColor,
-			skinColor: SkinColor[Enums.getRandom(SkinColor)] as keyof typeof SkinColor
+			skinColor: SkinColor[Enums.getRandom(SkinColor)] as keyof typeof SkinColor,
 		};
 
 		// Random spawn
@@ -106,7 +106,7 @@ export default class Reincarnate extends Mod {
 		player.messages.type(MessageType.Stat)
 			.send(this.reincarnateMessage);
 
-		player.updateTablesAndWeight();
+		player.updateTablesAndWeight("M");
 		player.updateStatsAndAttributes();
 
 		player.tick();

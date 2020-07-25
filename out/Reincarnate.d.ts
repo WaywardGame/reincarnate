@@ -3,5 +3,5 @@ import Message from "language/dictionary/Message";
 import Mod from "mod/Mod";
 export default class Reincarnate extends Mod {
     readonly reincarnateMessage: Message;
-    onPlayerDeath(player: Player): boolean | undefined;
+    onPlayerDeath(player: Player): false;
 }
