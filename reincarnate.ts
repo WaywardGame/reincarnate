@@ -85,22 +85,12 @@ export default class Reincarnate extends Mod {
 		};
 
 		// Random spawn
-		let xTry: number;
-		let yTry: number;
-		while (true) {
-			xTry = Math.floor(Random.float() * 400 + 50);
-			yTry = Math.floor(Random.float() * 400 + 50);
-			if (TileHelpers.isOpenTile({ x: xTry, y: yTry, z: WorldZ.Overworld }, game.getTile(xTry, yTry, WorldZ.Overworld))) {
-				player.x = xTry;
-				player.y = yTry;
-				player.fromX = xTry;
-				player.fromY = yTry;
-				break;
-			}
-		}
-
-		// Always make the player go to overworld
-		player.z = WorldZ.Overworld;
+		const newSpawnPoint = TileHelpers.getSuitableSpawnPoint();
+		player.x = newSpawnPoint.x;
+		player.y = newSpawnPoint.y;
+		player.fromX = newSpawnPoint.x;
+		player.fromY = newSpawnPoint.y;
+		player.z = WorldZ.Overworld; // Always make the player go to overworld
 
 		// Effects and messages
 		player.messages.type(MessageType.Stat)
