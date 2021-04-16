@@ -1,4 +1,4 @@
-import Player from "entity/player/Player";
+import Player from "game/entity/player/Player";
 import Message from "language/dictionary/Message";
 import Mod from "mod/Mod";
 export default class Reincarnate extends Mod {

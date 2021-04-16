@@ -1,21 +1,21 @@
 import { SfxType } from "audio/IAudio";
-import { StatusEffectChangeReason, StatusType } from "entity/IEntity";
-import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "entity/IHuman";
-import { Stat } from "entity/IStats";
-import { MessageType } from "entity/player/IMessageManager";
-import Player from "entity/player/Player";
 import { EventBus } from "event/EventBuses";
 import { EventHandler } from "event/EventManager";
+import { StatusEffectChangeReason, StatusType } from "game/entity/IEntity";
+import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "game/entity/IHuman";
+import { Stat } from "game/entity/IStats";
+import { MessageType } from "game/entity/player/IMessageManager";
+import Player from "game/entity/player/Player";
 import { RenderSource } from "game/IGame";
+import Terrains from "game/tile/Terrains";
 import { WorldZ } from "game/WorldZ";
 import Message from "language/dictionary/Message";
 import Mod from "mod/Mod";
 import Register from "mod/ModRegistry";
-import Terrains from "tile/Terrains";
 import Enums from "utilities/enum/Enums";
+import TileHelpers from "utilities/game/TileHelpers";
 import Math2 from "utilities/math/Math2";
-import Random from "utilities/Random";
-import TileHelpers from "utilities/TileHelpers";
+import Random from "utilities/random/Random";
 
 export default class Reincarnate extends Mod {
 
@@ -30,7 +30,7 @@ export default class Reincarnate extends Mod {
 		// Randomize skills a bit
 		const skills = Enums.values(SkillType);
 		for (const skillType of skills) {
-			let newSkill = Math2.roundNumber(Random.float() * 9 - 5 + player.getSkillCore(skillType), 1);
+			let newSkill = Math2.roundNumber(Random.float() * 9 - 5 + player.skill.getCore(skillType), 1);
 			if (newSkill > 100) {
 				newSkill = 100;
 
@@ -38,7 +38,7 @@ export default class Reincarnate extends Mod {
 				newSkill = 0;
 			}
 
-			player.setSkillCore(skillType, newSkill);
+			player.skill.setCore(skillType, newSkill);
 		}
 
 		// Randomize stats a bit
