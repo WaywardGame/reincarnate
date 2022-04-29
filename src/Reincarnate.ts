@@ -29,27 +29,31 @@ export default class Reincarnate extends Mod {
 		// Randomize skills a bit
 		const skills = Enums.values(SkillType);
 		for (const skillType of skills) {
-			let newSkill = Math2.roundNumber(player.island.seededRandom.float() * 9 - 5 + player.skill.getCore(skillType), 1);
-			if (newSkill > 100) {
-				newSkill = 100;
+			if (player.skill.getCore(skillType) > 0) {
+				let newSkill = Math2.roundNumber(player.island.seededRandom.float() * 9 - 5 + player.skill.getCore(skillType), 1);
+				if (newSkill > 100) {
+					newSkill = 100;
 
-			} else if (newSkill < 0) {
-				newSkill = 0;
+				} else if (newSkill < 0) {
+					newSkill = 0;
+				}
+
+				player.skill.setCore(skillType, newSkill);
 			}
-
-			player.skill.setCore(skillType, newSkill);
 		}
 
 		// Randomize stats a bit
 		const health = player.stat.get<IStatMax>(Stat.Health)!;
+		const strength = player.stat.get<IStatMax>(Stat.Strength)!;
 		const stamina = player.stat.get<IStatMax>(Stat.Stamina)!;
 		const hunger = player.stat.get<IStatMax>(Stat.Hunger)!;
 		const thirst = player.stat.get<IStatMax>(Stat.Thirst)!;
 
-		player.stat.setMax(Stat.Health, health.max + Math.floor(player.island.seededRandom.float() * 4 - 2));
-		player.stat.setMax(Stat.Stamina, stamina.max + Math.floor(player.island.seededRandom.float() * 4 - 2));
-		player.stat.setMax(Stat.Hunger, hunger.max + Math.floor(player.island.seededRandom.float() * 4 - 2));
-		player.stat.setMax(Stat.Thirst, thirst.max + Math.floor(player.island.seededRandom.float() * 4 - 2));
+		// Minimums gathered from Player.ts
+		player.stat.setMax(Stat.Stamina, Math.max(70, stamina.max + Math.floor(player.island.seededRandom.float() * 4 - 2)));
+		player.stat.setMax(Stat.Hunger, Math.max(15, hunger.max + Math.floor(player.island.seededRandom.float() * 4 - 2)));
+		player.stat.setMax(Stat.Thirst, Math.max(15, thirst.max + Math.floor(player.island.seededRandom.float() * 4 - 2)));
+		player.stat.setValue(Stat.Strength, Math.max(45, strength.base.value + Math.floor(player.island.seededRandom.float() * 4 - 2)));
 
 		// Reset stats
 		health.changeTimer = health.nextChangeTimer;
@@ -57,10 +61,11 @@ export default class Reincarnate extends Mod {
 		hunger.changeTimer = hunger.nextChangeTimer;
 		thirst.changeTimer = thirst.nextChangeTimer;
 
-		player.stat.set(health, health.max);
-		player.stat.set(stamina, stamina.max);
-		player.stat.set(hunger, hunger.max);
-		player.stat.set(thirst, thirst.max);
+		const randomHealthLostAtStart = player.island.seededRandom.int(5);
+		player.stat.setValue(Stat.Health, player.getMaxHealth() - randomHealthLostAtStart);
+		player.stat.setValue(Stat.Stamina, stamina.max - player.island.seededRandom.int(10));
+		player.stat.setValue(Stat.Hunger, hunger.max - player.island.seededRandom.int(2));
+		player.stat.setValue(Stat.Thirst, thirst.max - player.island.seededRandom.int(2));
 
 		player.setStatus(StatusType.Bleeding, false, StatusEffectChangeReason.Passed);
 		player.setStatus(StatusType.Burned, false, StatusEffectChangeReason.Passed);
