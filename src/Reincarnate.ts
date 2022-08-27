@@ -74,7 +74,6 @@ export default class Reincarnate extends Mod {
 		player.isMoving = false;
 		player.isMovingClientside = false;
 		player.movementCompleteZ = undefined;
-		player.movementProgress = 1;
 		player.restData = undefined;
 		player.swimming = false;
 		player.stopNextMovement = false;
