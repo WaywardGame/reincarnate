@@ -2,7 +2,7 @@ import { SfxType } from "audio/IAudio";
 import { EventBus } from "event/EventBuses";
 import { EventHandler } from "event/EventManager";
 import { StatusEffectChangeReason, StatusType } from "game/entity/IEntity";
-import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "game/entity/IHuman";
+import { Delay, HairColor, HairStyle, MovingClientSide, SkillType, SkinColor } from "game/entity/IHuman";
 import { IStatMax, Stat } from "game/entity/IStats";
 import { MessageType } from "game/entity/player/IMessageManager";
 import Player from "game/entity/player/Player";
@@ -72,7 +72,7 @@ export default class Reincarnate extends Mod {
 		player.setStatus(StatusType.Poisoned, false, StatusEffectChangeReason.Passed);
 
 		player.isMoving = false;
-		player.isMovingClientside = false;
+		player.movingClientside = MovingClientSide.NoInput;
 		player.movementCompleteZ = undefined;
 		player.restData = undefined;
 		player.swimming = false;
