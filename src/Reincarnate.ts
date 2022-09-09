@@ -111,7 +111,7 @@ export default class Reincarnate extends Mod {
 			player.swimming = true;
 		}
 
-		game.updateView(RenderSource.Mod, true);
+		renderers.updateView(RenderSource.Mod, true);
 
 		player.queueSoundEffect(SfxType.Death, undefined, undefined, true);
 
