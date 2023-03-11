@@ -13,7 +13,6 @@ import Mod from "mod/Mod";
 import Register from "mod/ModRegistry";
 import { RenderSource } from "renderer/IRenderer";
 import Enums from "utilities/enum/Enums";
-import TileHelpers from "utilities/game/TileHelpers";
 import Math2 from "utilities/math/Math2";
 
 export default class Reincarnate extends Mod {
@@ -24,7 +23,7 @@ export default class Reincarnate extends Mod {
 	@EventHandler(EventBus.Players, "shouldDie")
 	public onPlayerDeath(player: Player): false | void {
 		// Drop items
-		player.island.items.placeItemsAroundLocation(player.inventory, player.x, player.y, player.z);
+		player.island.items.placeItemsAroundTile(player.inventory, player.tile);
 
 		// Randomize skills a bit
 		const skills = Enums.values(SkillType);
@@ -86,7 +85,7 @@ export default class Reincarnate extends Mod {
 		};
 
 		// Random spawn
-		const newSpawnPoint = TileHelpers.getSuitableSpawnPoint(player.island);
+		const newSpawnPoint = player.island.getSuitableSpawnPoint();
 		player.x = newSpawnPoint.x;
 		player.y = newSpawnPoint.y;
 		player.fromX = newSpawnPoint.x;
@@ -106,12 +105,12 @@ export default class Reincarnate extends Mod {
 
 		// Start swimming if spawning in water
 		const spawnedTile = player.island.getTile(player.x, player.y, player.z);
-		const tileType = TileHelpers.getType(spawnedTile);
+		const tileType = spawnedTile.type;
 		if (Terrains[tileType]?.water) {
 			player.swimming = true;
 		}
 
-		renderers.updateView(RenderSource.Mod, true);
+		player.updateView(RenderSource.Mod, true);
 
 		player.queueSoundEffect(SfxType.Death, undefined, undefined, true);
 
