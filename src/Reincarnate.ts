@@ -6,7 +6,6 @@ import { Delay, HairColor, HairStyle, MovingClientSide, SkillType, SkinColor } f
 import { IStatMax, Stat } from "game/entity/IStats";
 import { MessageType } from "game/entity/player/IMessageManager";
 import Player from "game/entity/player/Player";
-import Terrains from "game/tile/Terrains";
 import { WorldZ } from "game/WorldZ";
 import Message from "language/dictionary/Message";
 import Mod from "mod/Mod";
@@ -105,8 +104,7 @@ export default class Reincarnate extends Mod {
 
 		// Start swimming if spawning in water
 		const spawnedTile = player.island.getTile(player.x, player.y, player.z);
-		const tileType = spawnedTile.type;
-		if (Terrains[tileType]?.water) {
+		if (spawnedTile.description()?.water) {
 			player.swimming = true;
 		}
 
