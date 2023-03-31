@@ -104,7 +104,7 @@ export default class Reincarnate extends Mod {
 
 		// Start swimming if spawning in water
 		const spawnedTile = player.island.getTile(player.x, player.y, player.z);
-		if (spawnedTile.description()?.water) {
+		if (spawnedTile.description?.water) {
 			player.swimming = true;
 		}
 
