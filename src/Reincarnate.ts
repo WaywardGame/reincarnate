@@ -110,7 +110,12 @@ export default class Reincarnate extends Mod {
 
 		player.updateView(RenderSource.Mod, true);
 
-		player.queueSoundEffect(SfxType.Death, undefined, undefined, true);
+		if (player.isLocalPlayer()) {
+			audio?.playUiSoundEffect(SfxType.Death);
+
+		} else {
+			player.queueSoundEffect(SfxType.Death);
+		}
 
 		return false;
 	}
