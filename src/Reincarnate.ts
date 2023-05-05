@@ -6,14 +6,12 @@ import { Delay, HairColor, HairStyle, MovingClientSide, SkillType, SkinColor } f
 import { IStatMax, Stat } from "game/entity/IStats";
 import { MessageType } from "game/entity/player/IMessageManager";
 import Player from "game/entity/player/Player";
-import Terrains from "game/tile/Terrains";
 import { WorldZ } from "game/WorldZ";
 import Message from "language/dictionary/Message";
 import Mod from "mod/Mod";
 import Register from "mod/ModRegistry";
 import { RenderSource } from "renderer/IRenderer";
 import Enums from "utilities/enum/Enums";
-import TileHelpers from "utilities/game/TileHelpers";
 import Math2 from "utilities/math/Math2";
 
 export default class Reincarnate extends Mod {
@@ -24,7 +22,7 @@ export default class Reincarnate extends Mod {
 	@EventHandler(EventBus.Players, "shouldDie")
 	public onPlayerDeath(player: Player): false | void {
 		// Drop items
-		player.island.items.placeItemsAroundLocation(player.inventory, player.x, player.y, player.z);
+		player.island.items.placeItemsAroundTile(player.inventory, player.tile);
 
 		// Randomize skills a bit
 		const skills = Enums.values(SkillType);
@@ -86,7 +84,7 @@ export default class Reincarnate extends Mod {
 		};
 
 		// Random spawn
-		const newSpawnPoint = TileHelpers.getSuitableSpawnPoint(player.island);
+		const newSpawnPoint = player.island.getSuitableSpawnPoint();
 		player.x = newSpawnPoint.x;
 		player.y = newSpawnPoint.y;
 		player.fromX = newSpawnPoint.x;
@@ -106,14 +104,18 @@ export default class Reincarnate extends Mod {
 
 		// Start swimming if spawning in water
 		const spawnedTile = player.island.getTile(player.x, player.y, player.z);
-		const tileType = TileHelpers.getType(spawnedTile);
-		if (Terrains[tileType]?.water) {
+		if (spawnedTile.description?.water) {
 			player.swimming = true;
 		}
 
-		renderers.updateView(RenderSource.Mod, true);
+		player.updateView(RenderSource.Mod, true);
 
-		player.queueSoundEffect(SfxType.Death, undefined, undefined, true);
+		if (player.isLocalPlayer()) {
+			audio?.playUiSoundEffect(SfxType.Death);
+
+		} else {
+			player.queueSoundEffect(SfxType.Death);
+		}
 
 		return false;
 	}
