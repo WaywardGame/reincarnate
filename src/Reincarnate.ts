@@ -85,7 +85,7 @@ export default class Reincarnate extends Mod {
 		player.movementCompleteZ = undefined;
 		player.restData = undefined;
 		player.swimming = false;
-		player.stopNextMovement = false;
+		delete player.shouldSkipNextMovement;
 
 		// Random character
 		player.customization = {
