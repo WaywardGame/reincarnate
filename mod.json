@@ -4,7 +4,7 @@
 	"version": "1.3.1",
 	"author": "Vaughn Royko",
 	"github": "https://github.com/WaywardGame/reincarnate",
-	"waywardVersion": "2.13.0-beta",
+	"waywardVersion": "2.14.0-beta",
 	"unloadable": true,
 	"file": "out/Reincarnate.js",
 	"languages": [
