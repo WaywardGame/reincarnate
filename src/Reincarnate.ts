@@ -1,5 +1,5 @@
 /*!
- * Copyright 2011-2023 Unlok
+ * Copyright 2011-2024 Unlok
  * https://www.unlok.ca
  *
  * Credits & Thanks:
@@ -12,17 +12,18 @@
 import { SfxType } from "@wayward/game/audio/IAudio";
 import { EventBus } from "@wayward/game/event/EventBuses";
 import { EventHandler } from "@wayward/game/event/EventManager";
-import { StatusEffectChangeReason, StatusType } from "@wayward/game/game/entity/IEntity";
+import { StatusChangeReason } from "@wayward/game/game/entity/IEntity";
 import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "@wayward/game/game/entity/IHuman";
 import { IStatMax, Stat } from "@wayward/game/game/entity/IStats";
 import { MessageType } from "@wayward/game/game/entity/player/IMessageManager";
 import Player from "@wayward/game/game/entity/player/Player";
-import { WorldZ } from "@wayward/utilities/game/WorldZ";
+import { StatusType } from "@wayward/game/game/entity/status/IStatus";
 import Message from "@wayward/game/language/dictionary/Message";
 import Mod from "@wayward/game/mod/Mod";
 import Register from "@wayward/game/mod/ModRegistry";
 import { RenderSource } from "@wayward/game/renderer/IRenderer";
 import Enums from "@wayward/game/utilities/enum/Enums";
+import { WorldZ } from "@wayward/utilities/game/WorldZ";
 import Math2 from "@wayward/utilities/math/Math2";
 
 export default class Reincarnate extends Mod {
@@ -76,9 +77,9 @@ export default class Reincarnate extends Mod {
 		player.stat.setValue(Stat.Hunger, hunger.max - player.island.seededRandom.int(2));
 		player.stat.setValue(Stat.Thirst, thirst.max - player.island.seededRandom.int(2));
 
-		player.setStatus(StatusType.Bleeding, false, StatusEffectChangeReason.Passed);
-		player.setStatus(StatusType.Burned, false, StatusEffectChangeReason.Passed);
-		player.setStatus(StatusType.Poisoned, false, StatusEffectChangeReason.Passed);
+		player.setStatus(StatusType.Bleeding, false, StatusChangeReason.Passed);
+		player.setStatus(StatusType.Burned, false, StatusChangeReason.Passed);
+		player.setStatus(StatusType.Poisoned, false, StatusChangeReason.Passed);
 
 		player.isMoving = false;
 		delete player.movingData.state;
@@ -101,7 +102,7 @@ export default class Reincarnate extends Mod {
 		player.y = newSpawnPoint.y;
 		player.fromX = newSpawnPoint.x;
 		player.fromY = newSpawnPoint.y;
-		player.z = WorldZ.Overworld; // Always make the player go to overworld
+		player.z = WorldZ.Surface; // Always make the player go to overworld
 
 		// Effects and messages
 		player.messages.type(MessageType.Stat)

@@ -1,9 +1,9 @@
 # Reincarnate
-Don't grieve. Anything you lose comes round in another form. ― Rumi 
+Don't grieve. Anything you lose comes round in another form. ― Rumi
 
 Reincarnate respawns you somewhere random in your world on death and refills your stats (health, stamina, etc.) but empties out your inventory to the spot where you died. Travel back to the spot of your demise to grab your items and resume your pursuits. Be careful next time, won't you?
 
-This differs a bit from the casual mode built into the game in that your character's appearance changes, your stats and skills are randomized a bit (based on previous values), and you spawn in a randomized location on death. Your alignment will also remain unchanged.
+This differs a bit from the casual mode built into the game in that your character's appearance changes, your stats and skills are randomized a bit (based on previous values), and you spawn in a randomized location on death.
 
 ## Cloning/Setup:
 ```
