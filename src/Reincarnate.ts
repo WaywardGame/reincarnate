@@ -12,7 +12,7 @@ import Mod from "@wayward/game/mod/Mod";
 import Register from "@wayward/game/mod/ModRegistry";
 import { RenderSource } from "@wayward/game/renderer/IRenderer";
 import Enums from "@wayward/game/utilities/enum/Enums";
-import { WorldZ } from "@wayward/utilities/game/WorldZ";
+import WorldZ from "@wayward/utilities/game/WorldZ";
 import Math2 from "@wayward/utilities/math/Math2";
 
 export default class Reincarnate extends Mod {
