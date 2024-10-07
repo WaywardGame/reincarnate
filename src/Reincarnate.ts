@@ -70,7 +70,6 @@ export default class Reincarnate extends Mod {
 		player.setStatus(StatusType.Burned, false, StatusChangeReason.Passed);
 		player.setStatus(StatusType.Poisoned, false, StatusChangeReason.Passed);
 
-		player.isMoving = false;
 		delete player.movingData.state;
 		delete player.movingData.time;
 		delete player.movingData.options;
