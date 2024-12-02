@@ -3,11 +3,12 @@ import { EventBus } from "@wayward/game/event/EventBuses";
 import { EventHandler } from "@wayward/game/event/EventManager";
 import { StatusChangeReason } from "@wayward/game/game/entity/IEntity";
 import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "@wayward/game/game/entity/IHuman";
-import { IStatMax, Stat } from "@wayward/game/game/entity/IStats";
+import type { IStatMax } from "@wayward/game/game/entity/IStats";
+import { Stat } from "@wayward/game/game/entity/IStats";
 import { MessageType } from "@wayward/game/game/entity/player/IMessageManager";
-import Player from "@wayward/game/game/entity/player/Player";
+import type Player from "@wayward/game/game/entity/player/Player";
 import { StatusType } from "@wayward/game/game/entity/status/IStatus";
-import Message from "@wayward/game/language/dictionary/Message";
+import type Message from "@wayward/game/language/dictionary/Message";
 import Mod from "@wayward/game/mod/Mod";
 import Register from "@wayward/game/mod/ModRegistry";
 import { RenderSource } from "@wayward/game/renderer/IRenderer";
@@ -108,7 +109,7 @@ export default class Reincarnate extends Mod {
 		player.updateView(RenderSource.Mod, true);
 
 		if (player.isLocalPlayer) {
-			audio?.playUiSoundEffect(SfxType.Death);
+			void audio?.playUiSoundEffect(SfxType.Death);
 
 		} else {
 			player.queueSoundEffect(SfxType.Death);
