@@ -1,29 +1,20 @@
-/*!
- * Copyright 2011-2023 Unlok
- * https://www.unlok.ca
- *
- * Credits & Thanks:
- * https://www.unlok.ca/credits-thanks/
- *
- * Wayward is a copyrighted and licensed work. Modification and/or distribution of any source files is prohibited. If you wish to modify the game in any way, please refer to the modding guide:
- * https://github.com/WaywardGame/types/wiki
- */
-
-import { SfxType } from "audio/IAudio";
-import { EventBus } from "event/EventBuses";
-import { EventHandler } from "event/EventManager";
-import { StatusEffectChangeReason, StatusType } from "game/entity/IEntity";
-import { Delay, HairColor, HairStyle, MovingClientSide, SkillType, SkinColor } from "game/entity/IHuman";
-import { IStatMax, Stat } from "game/entity/IStats";
-import { MessageType } from "game/entity/player/IMessageManager";
-import Player from "game/entity/player/Player";
-import { WorldZ } from "game/WorldZ";
-import Message from "language/dictionary/Message";
-import Mod from "mod/Mod";
-import Register from "mod/ModRegistry";
-import { RenderSource } from "renderer/IRenderer";
-import Enums from "utilities/enum/Enums";
-import Math2 from "utilities/math/Math2";
+import { SfxType } from "@wayward/game/audio/IAudio";
+import { EventBus } from "@wayward/game/event/EventBuses";
+import { EventHandler } from "@wayward/game/event/EventManager";
+import { StatusChangeReason } from "@wayward/game/game/entity/IEntity";
+import { Delay, HairColor, HairStyle, SkillType, SkinColor } from "@wayward/game/game/entity/IHuman";
+import type { IStatMax } from "@wayward/game/game/entity/IStats";
+import { Stat } from "@wayward/game/game/entity/IStats";
+import { MessageType } from "@wayward/game/game/entity/player/IMessageManager";
+import type Player from "@wayward/game/game/entity/player/Player";
+import { StatusType } from "@wayward/game/game/entity/status/IStatus";
+import type Message from "@wayward/game/language/dictionary/Message";
+import Mod from "@wayward/game/mod/Mod";
+import Register from "@wayward/game/mod/ModRegistry";
+import { RenderSource } from "@wayward/game/renderer/IRenderer";
+import Enums from "@wayward/game/utilities/enum/Enums";
+import WorldZ from "@wayward/utilities/game/WorldZ";
+import Math2 from "@wayward/utilities/math/Math2";
 
 export default class Reincarnate extends Mod {
 
@@ -76,15 +67,15 @@ export default class Reincarnate extends Mod {
 		player.stat.setValue(Stat.Hunger, hunger.max - player.island.seededRandom.int(2));
 		player.stat.setValue(Stat.Thirst, thirst.max - player.island.seededRandom.int(2));
 
-		player.setStatus(StatusType.Bleeding, false, StatusEffectChangeReason.Passed);
-		player.setStatus(StatusType.Burned, false, StatusEffectChangeReason.Passed);
-		player.setStatus(StatusType.Poisoned, false, StatusEffectChangeReason.Passed);
+		player.setStatus(StatusType.Bleeding, false, StatusChangeReason.Passed);
+		player.setStatus(StatusType.Burned, false, StatusChangeReason.Passed);
+		player.setStatus(StatusType.Poisoned, false, StatusChangeReason.Passed);
 
-		player.isMoving = false;
-		player.movingClientside = MovingClientSide.NoInput;
+		delete player.movingData.state;
+		delete player.movingData.time;
+		delete player.movingData.options;
 		player.movementCompleteZ = undefined;
 		player.restData = undefined;
-		player.swimming = false;
 		delete player.shouldSkipNextMovement;
 
 		// Random character
@@ -100,7 +91,7 @@ export default class Reincarnate extends Mod {
 		player.y = newSpawnPoint.y;
 		player.fromX = newSpawnPoint.x;
 		player.fromY = newSpawnPoint.y;
-		player.z = WorldZ.Overworld; // Always make the player go to overworld
+		player.z = WorldZ.Surface; // Always make the player go to overworld
 
 		// Effects and messages
 		player.messages.type(MessageType.Stat)
@@ -109,20 +100,16 @@ export default class Reincarnate extends Mod {
 		player.updateTablesAndWeight("M");
 		player.updateStatsAndAttributes();
 
+		player.updateSwimming();
+
 		player.tick();
 
 		player.addDelay(Delay.LongPause);
 
-		// Start swimming if spawning in water
-		const spawnedTile = player.island.getTile(player.x, player.y, player.z);
-		if (spawnedTile.description?.water) {
-			player.swimming = true;
-		}
-
 		player.updateView(RenderSource.Mod, true);
 
-		if (player.isLocalPlayer()) {
-			audio?.playUiSoundEffect(SfxType.Death);
+		if (player.isLocalPlayer) {
+			void audio?.playUiSoundEffect(SfxType.Death);
 
 		} else {
 			player.queueSoundEffect(SfxType.Death);
