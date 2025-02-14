@@ -1,0 +1,8 @@
+{
+	"extends": "English",
+	"dictionaries": {
+		"message": {
+			"modReincarnateReincarnate": "Vous vous êtes réincarné ! Pouvez-vous retrouver le lieu de votre précédente disparition ?"
+		}
+	}
+}
